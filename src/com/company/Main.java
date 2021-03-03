@@ -7,18 +7,20 @@ import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.image.BufferStrategy;
+import java.util.ArrayList;
 
 public class Main implements MouseListener, KeyListener {
 
-    private JFrame frame;
-    private JPanel panel;
-    private Canvas canvas;
+    public JFrame frame;
+    public JPanel panel;
+    public Canvas canvas;
 
-    private int WIDTH = 600;
-    private int HEIGHT = 600;
+    public int WIDTH = 600;
+    public int HEIGHT = 600;
 
-    private BufferStrategy bufferStrategy;
+    public BufferStrategy bufferStrategy;
 
+    public ArrayList<Planet> planets;
 
     public static void main(String[] args) {
         Main m = new Main();
@@ -27,12 +29,14 @@ public class Main implements MouseListener, KeyListener {
 
     public void run(){
         setUpGraphics();
+        setUpPlanets();
         while(true){
+            calcGravity();
             render();
         }
     }
 
-    private void setUpGraphics() {
+    public void setUpGraphics() {
         frame = new JFrame("Application Template");   //Create the program window or frame.  Names it.
         panel = (JPanel) frame.getContentPane();  //sets up a JPanel which is what goes in the frame
         panel.setPreferredSize(new Dimension(WIDTH, HEIGHT));  //sizes the JPanel
@@ -61,15 +65,62 @@ public class Main implements MouseListener, KeyListener {
         System.out.println("DONE graphic setup");
     }
 
-    private void render(){
+    public void setUpPlanets(){
+        planets = new ArrayList<Planet>();
+        Planet sun = new Planet("Sun", 50, 200, 200, Color.RED, 0, 0);
+        planets.add(sun);
+        Planet earth = new Planet("Earth", 20, 100, 200, Color.BLUE, 1, 1);
+        planets.add(earth);
+    }
+
+    public void calcGravity(){
+        for(int i=0; i<planets.size(); i++){
+            for(int j=0; j<planets.size(); j++){
+                if(i==j){
+                    continue;
+                }
+                double dx = (planets.get(i).xPos+planets.get(i).mass/2) - (planets.get(j).xPos+planets.get(j).mass/2);
+                double dy = (planets.get(i).yPos+planets.get(i).mass/2) - (planets.get(j).yPos+planets.get(j).mass/2);
+                double r = Math.sqrt(Math.pow(dx, 2) + Math.pow(dy, 2));
+
+                double force = crunchGrav(planets.get(i).mass, planets.get(j).mass, r);
+                double rad;
+
+                rad = Math.atan(dy/dx);
+                if(dx<0 && dy<0){
+                    rad += Math.PI;
+                }
+
+                double forceX = Math.cos(rad)*force;
+                double forceY = Math.sin(rad)*force;
+
+                planets.get(i).xAccel = (int) forceX/planets.get(i).mass;
+                planets.get(i).yAccel = (int) forceY/planets.get(i).mass;
+            }
+        }
+    }
+
+    public void render(){
         Graphics2D g = (Graphics2D) bufferStrategy.getDrawGraphics();
         g.clearRect(0, 0, WIDTH, HEIGHT);
 
         g.setColor(Color.BLACK);
         g.fillRect(0, 0, WIDTH, HEIGHT);
 
+        for(int i=0; i<planets.size(); i++){
+            planets.get(i).move();
+            g.setColor(planets.get(i).color);
+            g.drawString(planets.get(i).name, planets.get(i).xPos, planets.get(i).yPos-10);
+            g.fillOval(planets.get(i).xPos, planets.get(i).yPos, planets.get(i).mass, planets.get(i).mass);
+        }
+
         g.dispose();
         bufferStrategy.show();
+    }
+
+    public double crunchGrav(int m1, int m2, double r){
+        double G = 0.00000000006674;
+        return(G*(m1*m2)/Math.pow(r, 2));
     }
 
     /**
