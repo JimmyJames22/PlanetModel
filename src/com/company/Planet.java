@@ -25,7 +25,7 @@ public class Planet {
         this.yPos = yPos;
         this.color = color;
         this.xVel = xVel;
-        this.xVel = yVel;
+        this.yVel = yVel;
         this.size = size;
     }
 
@@ -34,6 +34,5 @@ public class Planet {
         yVel += yAccel;
         xPos += xVel;
         yPos += yVel;
-        System.out.println(name + " " + xPos + " " + yPos + " " + xVel + " " + yVel);
     }
 }
