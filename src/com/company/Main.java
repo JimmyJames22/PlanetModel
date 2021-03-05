@@ -67,9 +67,9 @@ public class Main implements MouseListener, KeyListener {
 
     public void setUpPlanets(){
         planets = new ArrayList<Planet>();
-        Planet sun = new Planet("Sun", 5, 20, 150, 250, Color.RED, 0, 0);
+        Planet sun = new Planet("Sun", 50, 20, 150, 250, Color.RED, 0, 0);
         planets.add(sun);
-        Planet earth = new Planet("Earth", 4, 10,100, 200, Color.BLUE, 0.01, 0.01);
+        Planet earth = new Planet("Earth", 0.4, 10,100, 200, Color.BLUE, 0.004, -0.002);
         planets.add(earth);
     }
 
@@ -95,20 +95,20 @@ public class Main implements MouseListener, KeyListener {
                 double forceY = Math.sin(rad)*force;
 
                 System.out.println();
-                planets.get(i).xAccel = (forceX/planets.get(i).mass);
+                planets.get(i).xAccel = (forceX/(planets.get(i).mass))*0.8;
                 System.out.println(planets.get(i).name + " xAccel " + planets.get(i).xAccel + " " + rad);
-                planets.get(i).yAccel = (forceY/planets.get(i).mass);
+                planets.get(i).yAccel = (forceY/(planets.get(i).mass))*0.8;
                 System.out.println(planets.get(i).name + " xAccel " + planets.get(i).yAccel + " " + rad);
             }
         }
     }
 
     public void render(){
-        try{
-            Thread.sleep(1);
-        } catch(Exception e){
-
-        }
+//        try{
+//            Thread.sleep(1);
+//        } catch(Exception e){
+//
+//        }
         Graphics2D g = (Graphics2D) bufferStrategy.getDrawGraphics();
         g.clearRect(0, 0, WIDTH, HEIGHT);
 
