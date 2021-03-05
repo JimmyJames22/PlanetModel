@@ -13,6 +13,7 @@ public class Planet {
     public double yAccel = 0;
     public double xVel;
     public double yVel;
+    public double rad;
 
     public int size;
 

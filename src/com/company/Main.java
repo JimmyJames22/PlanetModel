@@ -67,9 +67,9 @@ public class Main implements MouseListener, KeyListener {
 
     public void setUpPlanets(){
         planets = new ArrayList<Planet>();
-        Planet sun = new Planet("Sun", 50, 20, 150, 250, Color.RED, 0, 0);
+        Planet sun = new Planet("Sun", 5000, 20, 350, 250, Color.RED, 0, 0);
         planets.add(sun);
-        Planet earth = new Planet("Earth", 0.4, 10,100, 200, Color.BLUE, 0.004, -0.002);
+        Planet earth = new Planet("Earth", 40, 10,100, 200, Color.BLUE, 0, 0);
         planets.add(earth);
     }
 
@@ -95,20 +95,23 @@ public class Main implements MouseListener, KeyListener {
                 double forceY = Math.sin(rad)*force;
 
                 System.out.println();
-                planets.get(i).xAccel = (forceX/(planets.get(i).mass))*0.8;
+                planets.get(i).xAccel = (forceX/(planets.get(i).mass));
                 System.out.println(planets.get(i).name + " xAccel " + planets.get(i).xAccel + " " + rad);
-                planets.get(i).yAccel = (forceY/(planets.get(i).mass))*0.8;
+                planets.get(i).yAccel = (forceY/(planets.get(i).mass));
                 System.out.println(planets.get(i).name + " xAccel " + planets.get(i).yAccel + " " + rad);
+                planets.get(i).rad = rad;
             }
         }
     }
 
     public void render(){
-//        try{
-//            Thread.sleep(1);
-//        } catch(Exception e){
-//
+
+//        try {
+//            Thread.sleep(5);
+//        } catch (InterruptedException e) {
+//            e.printStackTrace();
 //        }
+
         Graphics2D g = (Graphics2D) bufferStrategy.getDrawGraphics();
         g.clearRect(0, 0, WIDTH, HEIGHT);
 
@@ -120,6 +123,9 @@ public class Main implements MouseListener, KeyListener {
             g.setColor(planets.get(i).color);
             g.drawString(planets.get(i).name, (int) planets.get(i).xPos, (int) planets.get(i).yPos-10);
             g.fillOval((int) planets.get(i).xPos, (int) planets.get(i).yPos, planets.get(i).size, planets.get(i).size);
+            g.setColor(Color.YELLOW);
+            g.drawLine((int) (planets.get(i).xPos + (planets.get(i).size/2)), (int) (planets.get(i).yPos + (planets.get(i).size/2)), (int) ((planets.get(i).xPos + (planets.get(i).size/2)) + ((Math.cos(planets.get(i).rad)*planets.get(i).xAccel)*100000000)), (int) ( (planets.get(i).yPos + (planets.get(i).size/2)) + (Math.sin(planets.get(i).rad)*planets.get(i).yAccel)*100000000));
+            g.drawString( planets.get(i).name + " x: " + planets.get(i).xPos + " y: " + planets.get(i).yPos, 20,  20+20*i);
         }
 
         g.dispose();
@@ -127,7 +133,7 @@ public class Main implements MouseListener, KeyListener {
     }
 
     public double crunchGrav(double m1, double m2, double r){
-        double G = 0.00006674;
+        double G = 0.006674;
         return(G*((m1*m2)/Math.pow(r, 2)));
     }
 
