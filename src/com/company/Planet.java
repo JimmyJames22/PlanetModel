@@ -6,17 +6,19 @@ public class Planet {
 
     public String name;
 
-    public int mass;
-    public int xPos;
-    public int yPos;
-    public int xAccel = 0;
-    public int yAccel = 0;
-    public int xVel;
-    public int yVel;
+    public double mass;
+    public double xPos;
+    public double yPos;
+    public double xAccel = 0;
+    public double yAccel = 0;
+    public double xVel;
+    public double yVel;
+
+    public int size;
 
     public Color color;
 
-    public Planet(String name, int mass, int xPos, int yPos, Color color, int yVel, int xVel){
+    public Planet(String name, double mass, int size, double xPos, double yPos, Color color, double yVel, double xVel){
         this.name = name;
         this.mass = mass;
         this.xPos = xPos;
@@ -24,6 +26,7 @@ public class Planet {
         this.color = color;
         this.xVel = xVel;
         this.xVel = yVel;
+        this.size = size;
     }
 
     public void move(){
@@ -31,6 +34,6 @@ public class Planet {
         yVel += yAccel;
         xPos += xVel;
         yPos += yVel;
-        System.out.println(name + " " + xPos + " " + yPos);
+        System.out.println(name + " " + xPos + " " + yPos + " " + xVel + " " + yVel);
     }
 }

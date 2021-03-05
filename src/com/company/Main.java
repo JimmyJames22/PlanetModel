@@ -67,9 +67,9 @@ public class Main implements MouseListener, KeyListener {
 
     public void setUpPlanets(){
         planets = new ArrayList<Planet>();
-        Planet sun = new Planet("Sun", 50, 200, 200, Color.RED, 0, 0);
+        Planet sun = new Planet("Sun", 500, 200, 200, 200, Color.RED, 0, 0);
         planets.add(sun);
-        Planet earth = new Planet("Earth", 20, 100, 200, Color.BLUE, 1, 1);
+        Planet earth = new Planet("Earth", 490, 100,100, 200, Color.BLUE, 1, -1);
         planets.add(earth);
     }
 
@@ -94,13 +94,22 @@ public class Main implements MouseListener, KeyListener {
                 double forceX = Math.cos(rad)*force;
                 double forceY = Math.sin(rad)*force;
 
-                planets.get(i).xAccel = (int) forceX/planets.get(i).mass;
-                planets.get(i).yAccel = (int) forceY/planets.get(i).mass;
+                System.out.println();
+                planets.get(i).xAccel = (forceX/planets.get(i).mass);
+                System.out.println("xAccel" + planets.get(i).xAccel);
+                planets.get(i).yAccel = (forceY/planets.get(i).mass);
+                System.out.println("yAccel" + planets.get(i).yAccel);
+                System.out.println();
             }
         }
     }
 
     public void render(){
+        try{
+            Thread.sleep(5);
+        } catch(Exception e){
+
+        }
         Graphics2D g = (Graphics2D) bufferStrategy.getDrawGraphics();
         g.clearRect(0, 0, WIDTH, HEIGHT);
 
@@ -110,17 +119,17 @@ public class Main implements MouseListener, KeyListener {
         for(int i=0; i<planets.size(); i++){
             planets.get(i).move();
             g.setColor(planets.get(i).color);
-            g.drawString(planets.get(i).name, planets.get(i).xPos, planets.get(i).yPos-10);
-            g.fillOval(planets.get(i).xPos, planets.get(i).yPos, planets.get(i).mass, planets.get(i).mass);
+            g.drawString(planets.get(i).name, (int) planets.get(i).xPos, (int) planets.get(i).yPos-10);
+            g.fillOval((int) planets.get(i).xPos, (int) planets.get(i).yPos, (int) planets.get(i).size, (int) planets.get(i).size);
         }
 
         g.dispose();
         bufferStrategy.show();
     }
 
-    public double crunchGrav(int m1, int m2, double r){
-        double G = 0.00000000006674;
-        return(G*(m1*m2)/Math.pow(r, 2));
+    public double crunchGrav(double m1, double m2, double r){
+        double G = 0.0006674;
+        return(G*((m1*m2)/Math.pow(r, 2)));
     }
 
     /**
