@@ -67,9 +67,9 @@ public class Main implements MouseListener, KeyListener {
 
     public void setUpPlanets(){
         planets = new ArrayList<Planet>();
-        Planet sun = new Planet("Sun", 5000, 20, 350, 250, Color.RED, 0, 0);
+        Planet sun = new Planet("Sun", 50, 20, 100, 250, Color.RED, 0, 0.01);
         planets.add(sun);
-        Planet earth = new Planet("Earth", 40, 10,100, 200, Color.BLUE, 0, 0);
+        Planet earth = new Planet("Earth", 10, 10,100, 200, Color.BLUE, 0, 0);
         planets.add(earth);
     }
 
@@ -79,26 +79,25 @@ public class Main implements MouseListener, KeyListener {
                 if(i==j){
                     continue;
                 }
-                double dx = (planets.get(i).xPos+planets.get(i).mass/2) - (planets.get(j).xPos+planets.get(j).mass/2);
-                double dy = (planets.get(i).yPos+planets.get(i).mass/2) - (planets.get(j).yPos+planets.get(j).mass/2);
+                double dx = (planets.get(i).xPos+planets.get(i).size/2) - (planets.get(j).xPos+planets.get(j).size/2);
+                double dy = (planets.get(i).yPos+planets.get(i).size/2) - (planets.get(j).yPos+planets.get(j).size/2);
                 double r = Math.sqrt(Math.pow(dx, 2) + Math.pow(dy, 2));
 
                 double force = crunchGrav(planets.get(i).mass, planets.get(j).mass, r);
                 double rad;
 
                 rad = Math.atan(dy/dx);
-                if(dx>0 && dy>0){
+                if(dx>0) {
                     rad += Math.PI;
+                    if (planets.get(i).name == "Sun") {
+                        System.out.println(rad);
+                    }
                 }
-
                 double forceX = Math.cos(rad)*force;
                 double forceY = Math.sin(rad)*force;
 
-                System.out.println();
                 planets.get(i).xAccel = (forceX/(planets.get(i).mass));
-                System.out.println(planets.get(i).name + " xAccel " + planets.get(i).xAccel + " " + rad);
                 planets.get(i).yAccel = (forceY/(planets.get(i).mass));
-                System.out.println(planets.get(i).name + " xAccel " + planets.get(i).yAccel + " " + rad);
                 planets.get(i).rad = rad;
             }
         }
@@ -124,7 +123,7 @@ public class Main implements MouseListener, KeyListener {
             g.drawString(planets.get(i).name, (int) planets.get(i).xPos, (int) planets.get(i).yPos-10);
             g.fillOval((int) planets.get(i).xPos, (int) planets.get(i).yPos, planets.get(i).size, planets.get(i).size);
             g.setColor(Color.YELLOW);
-            g.drawLine((int) (planets.get(i).xPos + (planets.get(i).size/2)), (int) (planets.get(i).yPos + (planets.get(i).size/2)), (int) ((planets.get(i).xPos + (planets.get(i).size/2)) + ((Math.cos(planets.get(i).rad)*planets.get(i).xAccel)*100000000)), (int) ( (planets.get(i).yPos + (planets.get(i).size/2)) + (Math.sin(planets.get(i).rad)*planets.get(i).yAccel)*100000000));
+            g.drawLine((int) (planets.get(i).xPos + (planets.get(i).size/2)), (int) (planets.get(i).yPos + (planets.get(i).size/2)), (int) ((planets.get(i).xPos + (planets.get(i).size/2)) + ((Math.cos(planets.get(i).rad)*Math.abs(planets.get(i).xAccel))*100000000)), (int) ( (planets.get(i).yPos + (planets.get(i).size/2)) + (Math.sin(planets.get(i).rad)*Math.abs(planets.get(i).yAccel))*100000000));
             g.drawString( planets.get(i).name + " x: " + planets.get(i).xPos + " y: " + planets.get(i).yPos, 20,  20+20*i);
         }
 
@@ -133,7 +132,7 @@ public class Main implements MouseListener, KeyListener {
     }
 
     public double crunchGrav(double m1, double m2, double r){
-        double G = 0.006674;
+        double G = 0.0003;
         return(G*((m1*m2)/Math.pow(r, 2)));
     }
 
