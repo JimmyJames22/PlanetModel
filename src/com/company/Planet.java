@@ -1,6 +1,7 @@
 package com.company;
 
 import java.awt.*;
+import java.util.ArrayList;
 
 public class Planet {
 
@@ -11,6 +12,7 @@ public class Planet {
     public double yPos;
     public double xAccel = 0;
     public double yAccel = 0;
+    public double force;
     public double xVel;
     public double yVel;
     public double rad;
@@ -18,6 +20,8 @@ public class Planet {
     public int size;
 
     public Color color;
+
+    public ArrayList<Vector> vectors = new ArrayList<Vector>();
 
     public Planet(String name, double mass, int size, double xPos, double yPos, Color color, double yVel, double xVel){
         this.name = name;
@@ -31,9 +35,24 @@ public class Planet {
     }
 
     public void move(){
+        setVectors();
         xVel += xAccel;
         yVel += yAccel;
         xPos += xVel;
         yPos += yVel;
+    }
+
+    public void setVectors(){
+        xAccel = 0;
+        yAccel = 0;
+        rad = 0;
+        force = 0;
+        for(int i=0; i<vectors.size(); i++){
+            force += vectors.get(i).force;
+            xAccel += vectors.get(i).xForce()/mass;
+            yAccel += vectors.get(i).yForce()/mass;
+            rad += vectors.get(i).rad;
+        }
+        rad = Math.asin(xAccel/force);
     }
 }
