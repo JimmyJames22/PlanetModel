@@ -48,11 +48,13 @@ public class Planet {
         rad = 0;
         force = 0;
         for(int i=0; i<vectors.size(); i++){
-            force += vectors.get(i).force;
             xAccel += vectors.get(i).xForce()/mass;
             yAccel += vectors.get(i).yForce()/mass;
-            rad += vectors.get(i).rad;
         }
-        rad = Math.asin(xAccel/force);
+        rad = Math.atan(yAccel/xAccel);
+        if(xAccel<0){
+            rad += Math.PI;
+        }
+        vectors.clear();
     }
 }
