@@ -72,11 +72,11 @@ public class Main implements MouseListener, KeyListener {
 
     public void setUpPlanets(){
         planets = new ArrayList<Planet>();
-        Planet sun = new Planet("Sun", 1988500, 20, 150, 175, Color.YELLOW, 0, 0);
+        Planet sun = new Planet("Sun", 1, 20, 150, 175, Color.YELLOW, 0.5, 0);
         planets.add(sun);
-        Planet earth = new Planet("Earth", 5.97, 10,125, 200, Color.BLUE, 0, 0);
+        Planet earth = new Planet("Earth", 50.97, 10,125, 200, Color.BLUE, 0, 0.05);
         planets.add(earth);
-        Planet mars = new Planet("Mars", 7, 10, 175, 150, Color.RED, 0, 0);
+        Planet mars = new Planet("Mars", 70, 10, 175, 150, Color.RED, 0.1, 0);
         planets.add(mars);
     }
 
@@ -126,7 +126,7 @@ public class Main implements MouseListener, KeyListener {
     }
 
     public double crunchGrav(double m1, double m2, double r){
-        double G = 0.00000003;
+        double G = 0.01;
         return(G*((m1*m2)/Math.pow(r, 2)));
     }
 
