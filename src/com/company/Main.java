@@ -134,19 +134,19 @@ public class Main implements MouseListener, KeyListener {
         g.setColor(Color.BLACK);
         g.fillRect(0, 0, WIDTH, HEIGHT);
 
-        shiftX = (int) (focusedObj.xPos - WIDTH/2) * -1;
-        shiftY = (int) (focusedObj.yPos - HEIGHT/2) * -1;
+        shiftX = (int) (focusedObj.xPos + focusedObj.sizeX/2 - WIDTH/2) * -1;
+        shiftY = (int) (focusedObj.yPos + focusedObj.sizeY/2 - HEIGHT/2) * -1;
 
         System.out.println("ShiftX: " + shiftX + ", ShiftY: " + shiftY);
 
         for(int i=0; i<movingObjs.size(); i++){
             movingObjs.get(i).move();
             g.setColor(movingObjs.get(i).color);
-            g.drawString(movingObjs.get(i).name, (int) (movingObjs.get(i).drawXPos(shiftX, scaleX, focusedObj)), (int) (movingObjs.get(i).drawYPos(shiftY, scaleY, focusedObj)-10));
-            g.drawImage(movingObjs.get(i).pic, (int) (movingObjs.get(i).drawXPos(shiftX, scaleX, focusedObj)), (int) (movingObjs.get(i).drawYPos(shiftY, scaleY, focusedObj)), movingObjs.get(i).sizeX, movingObjs.get(i).sizeY, null);
+            g.drawString(movingObjs.get(i).name, (int) (movingObjs.get(i).xPos) + shiftX, (int) (movingObjs.get(i).yPos-10) + shiftY);
+            g.drawImage(movingObjs.get(i).pic, (int) (movingObjs.get(i).xPos) + shiftX, (int) (movingObjs.get(i).yPos) + shiftY, movingObjs.get(i).sizeX, movingObjs.get(i).sizeY, null);
             g.setColor(Color.YELLOW);
-            g.drawLine((int) (movingObjs.get(i).drawXPos(shiftX, scaleX, focusedObj) + (movingObjs.get(i).sizeX/2)), (int) (movingObjs.get(i).drawYPos(shiftY, scaleY, focusedObj) + (movingObjs.get(i).sizeY/2)), (int) ((movingObjs.get(i).drawXPos(shiftX, scaleX, focusedObj) + (movingObjs.get(i).sizeX/2)) + ((Math.cos(movingObjs.get(i).rad)*Math.abs(movingObjs.get(i).xAccel))*100000000)), (int) ((movingObjs.get(i).drawYPos(shiftY, scaleY, focusedObj) + (movingObjs.get(i).sizeY/2) + (Math.sin(movingObjs.get(i).rad)*Math.abs(movingObjs.get(i).yAccel))*100000000)));
-            g.drawString( movingObjs.get(i).name + " x: " + movingObjs.get(i).xPos + " y: " + movingObjs.get(i).yPos, 20,  20+20*i);
+            g.drawLine((int) (movingObjs.get(i).xPos + (movingObjs.get(i).sizeX/2)) + shiftX, (int) (movingObjs.get(i).yPos + (movingObjs.get(i).sizeY/2)) + shiftY, (int) ((movingObjs.get(i).xPos + (movingObjs.get(i).sizeX/2)) + ((Math.cos(movingObjs.get(i).rad)*Math.abs(movingObjs.get(i).xAccel))*100000000)) + shiftX, (int) ((movingObjs.get(i).yPos + (movingObjs.get(i).sizeY/2) + (Math.sin(movingObjs.get(i).rad)*Math.abs(movingObjs.get(i).yAccel))*100000000)) + shiftY);
+            g.drawString( movingObjs.get(i).name + " x: " + movingObjs.get(i).xPos + " y: " + movingObjs.get(i).yPos, 10,  20+20*i);
         }
 
         g.dispose();
@@ -243,6 +243,14 @@ public class Main implements MouseListener, KeyListener {
             case  'a':
                 movingObjs.get(0).xPos -= 2;
                 break;
+            case 'r':
+                int index = movingObjs.indexOf(focusedObj);
+                if(index == movingObjs.size() -1){
+                    index = 0;
+                } else {
+                    index++;
+                }
+                focusedObj = movingObjs.get(index);
         }
     }
 
