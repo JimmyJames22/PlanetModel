@@ -64,11 +64,11 @@ public class MovingObj {
         yPos += yVel;
     }
 
-    public double OffsetX(MovingObj focusedObj){
-        return (focusedObj.xPos - xPos) * -1;
+    public double drawXPos(int shiftX, double scaleX, MovingObj focusedObj){
+        return ((focusedObj.xPos + focusedObj.sizeX/2) + ((((focusedObj.xPos + focusedObj.sizeX/2) - (xPos + sizeX/2)) * -1) * scaleX)) + shiftX;
     }
 
-    public double OffsetY(MovingObj focusedObj){
-        return (focusedObj.yPos - yPos) * -1;
+    public double drawYPos(int shiftY, double scaleY, MovingObj focusedObj){
+        return ((focusedObj.yPos + focusedObj.sizeY/2) + ((((focusedObj.yPos + focusedObj.sizeY/2) - (yPos + sizeY/2)) * -1) * scaleY)) + shiftY;
     }
 }

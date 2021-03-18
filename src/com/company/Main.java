@@ -20,8 +20,9 @@ public class Main implements MouseListener, KeyListener {
 
     public int shiftX;
     public int shiftY;
-    public int scaleX;
-    public int scaleY;
+
+    public double scaleX;
+    public double scaleY;
 
     public MovingObj focusedObj;
 
@@ -141,10 +142,10 @@ public class Main implements MouseListener, KeyListener {
         for(int i=0; i<movingObjs.size(); i++){
             movingObjs.get(i).move();
             g.setColor(movingObjs.get(i).color);
-            g.drawString(movingObjs.get(i).name, (int) (movingObjs.get(i).xPos) + shiftX, (int) (movingObjs.get(i).yPos-10) + shiftY);
-            g.drawImage(movingObjs.get(i).pic, (int) (movingObjs.get(i).xPos) + shiftX, (int) (movingObjs.get(i).yPos) + shiftY, movingObjs.get(i).sizeX, movingObjs.get(i).sizeY, null);
+            g.drawString(movingObjs.get(i).name, (int) (movingObjs.get(i).drawXPos(shiftX, scaleX, focusedObj)), (int) (movingObjs.get(i).drawYPos(shiftY, scaleY, focusedObj)-10));
+            g.drawImage(movingObjs.get(i).pic, (int) (movingObjs.get(i).drawXPos(shiftX, scaleX, focusedObj)), (int) (movingObjs.get(i).drawYPos(shiftY, scaleY, focusedObj)), movingObjs.get(i).sizeX, movingObjs.get(i).sizeY, null);
             g.setColor(Color.YELLOW);
-            g.drawLine((int) (movingObjs.get(i).xPos + (movingObjs.get(i).sizeX/2)) + shiftX, (int) (movingObjs.get(i).yPos + (movingObjs.get(i).sizeY/2)) + shiftY, (int) ((movingObjs.get(i).xPos + (movingObjs.get(i).sizeX/2)) + ((Math.cos(movingObjs.get(i).rad)*Math.abs(movingObjs.get(i).xAccel))*100000000)) + shiftX, (int) ((movingObjs.get(i).yPos + (movingObjs.get(i).sizeY/2) + (Math.sin(movingObjs.get(i).rad)*Math.abs(movingObjs.get(i).yAccel))*100000000)) + shiftY);
+            g.drawLine((int) (movingObjs.get(i).drawXPos(shiftX, scaleX, focusedObj) + (movingObjs.get(i).sizeX/2)), (int) (movingObjs.get(i).drawYPos(shiftY, scaleY, focusedObj) + (movingObjs.get(i).sizeY/2)), (int) ((movingObjs.get(i).drawXPos(shiftX, scaleX, focusedObj) + (movingObjs.get(i).sizeX/2)) + ((Math.cos(movingObjs.get(i).rad)*Math.abs(movingObjs.get(i).xAccel))*100000000)), (int) ((movingObjs.get(i).drawYPos(shiftY, scaleY, focusedObj) + (movingObjs.get(i).sizeY/2) + (Math.sin(movingObjs.get(i).rad)*Math.abs(movingObjs.get(i).yAccel))*100000000)));
             g.drawString( movingObjs.get(i).name + " x: " + movingObjs.get(i).xPos + " y: " + movingObjs.get(i).yPos, 20,  20+20*i);
         }
 
