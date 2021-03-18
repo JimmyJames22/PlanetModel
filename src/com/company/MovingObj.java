@@ -3,7 +3,7 @@ package com.company;
 import java.awt.*;
 import java.util.ArrayList;
 
-public class Planet {
+public class MovingObj {
 
     public String name;
 
@@ -17,30 +17,28 @@ public class Planet {
     public double yVel;
     public double rad;
 
-    public int size;
+    public int sizeX;
+    public int sizeY;
 
     public Color color;
 
     public ArrayList<Vector> vectors = new ArrayList<Vector>();
 
-    public Planet(String name, double mass, int size, double xPos, double yPos, Color color, double yVel, double xVel){
+    public Image pic;
+
+    public MovingObj (String name, double mass, int sizeX, int sizeY, double xPos, double yPos, Color color, double yVel, double xVel, Image pic) {
         this.name = name;
         this.mass = mass;
         this.xPos = xPos;
         this.yPos = yPos;
-        this.color = color;
         this.xVel = xVel;
         this.yVel = yVel;
-        this.size = size;
+        this.sizeX = sizeX;
+        this.sizeY = sizeY;
+        this.color = color;
+        this.pic = pic;
     }
 
-    public void move(){
-        setVectors();
-        xVel += xAccel;
-        yVel += yAccel;
-        xPos += xVel;
-        yPos += yVel;
-    }
 
     public void setVectors(){
         xAccel = 0;
@@ -56,5 +54,21 @@ public class Planet {
             rad += Math.PI;
         }
         vectors.clear();
+    }
+
+    public void move(){
+        setVectors();
+        xVel += xAccel;
+        yVel += yAccel;
+        xPos += xVel;
+        yPos += yVel;
+    }
+
+    public double OffsetX(MovingObj focusedObj){
+        return (focusedObj.xPos - xPos) * -1;
+    }
+
+    public double OffsetY(MovingObj focusedObj){
+        return (focusedObj.yPos - yPos) * -1;
     }
 }

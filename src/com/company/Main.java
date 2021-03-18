@@ -18,9 +18,21 @@ public class Main implements MouseListener, KeyListener {
     public int WIDTH = 600;
     public int HEIGHT = 600;
 
+    public int shiftX;
+    public int shiftY;
+    public int scaleX;
+    public int scaleY;
+
+    public MovingObj focusedObj;
+
     public BufferStrategy bufferStrategy;
 
-    public ArrayList<Planet> planets;
+    public ArrayList<MovingObj> movingObjs;
+
+    public Image sunPic;
+    public Image marsPic;
+    public Image earthPic;
+    public Image shuttlePic;
 
     public static void main(String[] args) {
         Main m = new Main();
@@ -67,30 +79,40 @@ public class Main implements MouseListener, KeyListener {
         canvas.createBufferStrategy(2);
         bufferStrategy = canvas.getBufferStrategy();
         canvas.requestFocus();
+
+        sunPic = Toolkit.getDefaultToolkit().getImage("sun.png");
+        earthPic = Toolkit.getDefaultToolkit().getImage("earth.png");
+        marsPic = Toolkit.getDefaultToolkit().getImage("mars.png");
+        shuttlePic = Toolkit.getDefaultToolkit().getImage("shuttle.png");
+
         System.out.println("DONE graphic setup");
     }
 
     public void setUpPlanets(){
-        planets = new ArrayList<Planet>();
-        Planet sun = new Planet("Sun", 1, 20, 150, 175, Color.YELLOW, 0.5, 0);
-        planets.add(sun);
-        Planet earth = new Planet("Earth", 50.97, 10,125, 200, Color.BLUE, 0, 0.05);
-        planets.add(earth);
-        Planet mars = new Planet("Mars", 70, 10, 175, 150, Color.RED, 0.1, 0);
-        planets.add(mars);
+        movingObjs = new ArrayList<MovingObj>();
+        MovingObj shuttle = new MovingObj("Shuttle", 5 ,12, 24, 300, 300, Color.WHITE, 0, 0, shuttlePic);
+        movingObjs.add(shuttle);
+        MovingObj sun = new MovingObj("Sun", 1000, 40, 40, 375, 175, Color.YELLOW, 0.0005, 0, sunPic);
+        movingObjs.add(sun);
+        MovingObj earth = new MovingObj("Earth", 600, 20, 20,100, 300, Color.BLUE, 0, 0.0005, earthPic);
+        movingObjs.add(earth);
+        MovingObj mars = new MovingObj("Mars", 800, 20, 20,175, 150, Color.RED, 0.001, 0, marsPic);
+        movingObjs.add(mars);
+
+        focusedObj = shuttle;
     }
 
     public void calcGravity(){
-        for(int i=0; i<planets.size(); i++){
-            for(int j=0; j<planets.size(); j++){
+        for(int i=0; i<movingObjs.size(); i++){
+            for(int j=0; j<movingObjs.size(); j++){
                 if(i==j){
                     continue;
                 }
-                double dx = (planets.get(i).xPos+planets.get(i).size/2) - (planets.get(j).xPos+planets.get(j).size/2);
-                double dy = (planets.get(i).yPos+planets.get(i).size/2) - (planets.get(j).yPos+planets.get(j).size/2);
+                double dx = (movingObjs.get(i).xPos+movingObjs.get(i).sizeX/2) - (movingObjs.get(j).xPos+movingObjs.get(j).sizeX/2);
+                double dy = (movingObjs.get(i).yPos+movingObjs.get(i).sizeY/2) - (movingObjs.get(j).yPos+movingObjs.get(j).sizeY/2);
                 double r = Math.sqrt(Math.pow(dx, 2) + Math.pow(dy, 2));
 
-                double force = crunchGrav(planets.get(i).mass, planets.get(j).mass, r);
+                double force = crunchGrav(movingObjs.get(i).mass, movingObjs.get(j).mass, r);
                 double rad;
 
                 rad = Math.atan(dy/dx);
@@ -99,7 +121,7 @@ public class Main implements MouseListener, KeyListener {
                 }
 
                 Vector vect = new Vector(rad, force);
-                planets.get(i).vectors.add(vect);
+                movingObjs.get(i).vectors.add(vect);
             }
         }
     }
@@ -111,14 +133,19 @@ public class Main implements MouseListener, KeyListener {
         g.setColor(Color.BLACK);
         g.fillRect(0, 0, WIDTH, HEIGHT);
 
-        for(int i=0; i<planets.size(); i++){
-            planets.get(i).move();
-            g.setColor(planets.get(i).color);
-            g.drawString(planets.get(i).name, (int) (planets.get(i).xPos), (int) (planets.get(i).yPos-10));
-            g.fillOval((int) (planets.get(i).xPos), (int) (planets.get(i).yPos), planets.get(i).size, planets.get(i).size);
+        shiftX = (int) (focusedObj.xPos - WIDTH/2) * -1;
+        shiftY = (int) (focusedObj.yPos - HEIGHT/2) * -1;
+
+        System.out.println("ShiftX: " + shiftX + ", ShiftY: " + shiftY);
+
+        for(int i=0; i<movingObjs.size(); i++){
+            movingObjs.get(i).move();
+            g.setColor(movingObjs.get(i).color);
+            g.drawString(movingObjs.get(i).name, (int) (movingObjs.get(i).xPos) + shiftX, (int) (movingObjs.get(i).yPos-10) + shiftY);
+            g.drawImage(movingObjs.get(i).pic, (int) (movingObjs.get(i).xPos) + shiftX, (int) (movingObjs.get(i).yPos) + shiftY, movingObjs.get(i).sizeX, movingObjs.get(i).sizeY, null);
             g.setColor(Color.YELLOW);
-            g.drawLine((int) (planets.get(i).xPos + (planets.get(i).size/2)), (int) (planets.get(i).yPos + (planets.get(i).size/2)), (int) ((planets.get(i).xPos + (planets.get(i).size/2)) + ((Math.cos(planets.get(i).rad)*Math.abs(planets.get(i).xAccel))*100000000)), (int) ((planets.get(i).yPos + (planets.get(i).size/2) + (Math.sin(planets.get(i).rad)*Math.abs(planets.get(i).yAccel))*100000000)));
-            g.drawString( planets.get(i).name + " x: " + planets.get(i).xPos + " y: " + planets.get(i).yPos, 20,  20+20*i);
+            g.drawLine((int) (movingObjs.get(i).xPos + (movingObjs.get(i).sizeX/2)) + shiftX, (int) (movingObjs.get(i).yPos + (movingObjs.get(i).sizeY/2)) + shiftY, (int) ((movingObjs.get(i).xPos + (movingObjs.get(i).sizeX/2)) + ((Math.cos(movingObjs.get(i).rad)*Math.abs(movingObjs.get(i).xAccel))*100000000)) + shiftX, (int) ((movingObjs.get(i).yPos + (movingObjs.get(i).sizeY/2) + (Math.sin(movingObjs.get(i).rad)*Math.abs(movingObjs.get(i).yAccel))*100000000)) + shiftY);
+            g.drawString( movingObjs.get(i).name + " x: " + movingObjs.get(i).xPos + " y: " + movingObjs.get(i).yPos, 20,  20+20*i);
         }
 
         g.dispose();
@@ -126,7 +153,7 @@ public class Main implements MouseListener, KeyListener {
     }
 
     public double crunchGrav(double m1, double m2, double r){
-        double G = 0.01;
+        double G = 0.0005;
         return(G*((m1*m2)/Math.pow(r, 2)));
     }
 
@@ -202,7 +229,20 @@ public class Main implements MouseListener, KeyListener {
      */
     @Override
     public void keyPressed(KeyEvent e) {
-
+        switch(e.getKeyChar()){
+            case 'w':
+                movingObjs.get(0).yPos -= 2;
+                break;
+            case 's':
+                movingObjs.get(0).yPos += 2;
+                break;
+            case 'd':
+                movingObjs.get(0).xPos += 2;
+                break;
+            case  'a':
+                movingObjs.get(0).xPos -= 2;
+                break;
+        }
     }
 
     /**
