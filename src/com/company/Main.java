@@ -21,8 +21,8 @@ public class Main implements MouseListener, KeyListener {
     public int shiftX;
     public int shiftY;
 
-    public double scaleX;
-    public double scaleY;
+    public double scaleXGlob;
+    public double scaleYGlob;
 
     public MovingObj focusedObj;
 
@@ -86,21 +86,24 @@ public class Main implements MouseListener, KeyListener {
         marsPic = Toolkit.getDefaultToolkit().getImage("mars.png");
         shuttlePic = Toolkit.getDefaultToolkit().getImage("shuttle.png");
 
+        scaleXGlob = 1;
+        scaleYGlob = 1;
+
         System.out.println("DONE graphic setup");
     }
 
     public void setUpPlanets(){
         movingObjs = new ArrayList<MovingObj>();
-        MovingObj shuttle = new MovingObj("Shuttle", 5 ,12, 24, 300, 300, Color.WHITE, 0, 0, shuttlePic);
-        movingObjs.add(shuttle);
-        MovingObj sun = new MovingObj("Sun", 1000, 40, 40, 375, 175, Color.YELLOW, 0.0005, 0, sunPic);
+//        MovingObj shuttle = new MovingObj("Shuttle", 5 ,12, 24, 300, 300, Color.WHITE, 0, 0, shuttlePic);
+//        movingObjs.add(shuttle);
+        MovingObj sun = new MovingObj("Sun", 100000, 80, 80, 200, 200, Color.YELLOW, 0, 0, sunPic);
         movingObjs.add(sun);
-        MovingObj earth = new MovingObj("Earth", 600, 20, 20,100, 300, Color.BLUE, 0, 0.0005, earthPic);
+        MovingObj earth = new MovingObj("Earth", 600, 20, 20,200, 400, Color.BLUE, sun, earthPic);
         movingObjs.add(earth);
-        MovingObj mars = new MovingObj("Mars", 800, 20, 20,175, 150, Color.RED, 0.001, 0, marsPic);
+        MovingObj mars = new MovingObj("Mars", 650, 20, 20,-50, 200, Color.RED, sun, marsPic);
         movingObjs.add(mars);
 
-        focusedObj = shuttle;
+        focusedObj = sun;
     }
 
     public void calcGravity(){
@@ -137,12 +140,22 @@ public class Main implements MouseListener, KeyListener {
         shiftX = (int) (focusedObj.xPos + focusedObj.sizeX/2 - WIDTH/2) * -1;
         shiftY = (int) (focusedObj.yPos + focusedObj.sizeY/2 - HEIGHT/2) * -1;
 
-        System.out.println("ShiftX: " + shiftX + ", ShiftY: " + shiftY);
+//        System.out.println("ShiftX: " + shiftX + ", ShiftY: " + shiftY);
 
         for(int i=0; i<movingObjs.size(); i++){
+            double scaleX = scaleXGlob;
+            double scaleY = scaleYGlob;
+            if((focusedObj.yPos - movingObjs.get(i).yPos) * -1 < 0 && (focusedObj.xPos - movingObjs.get(i).xPos) * -1 > 0){
+                scaleY *= -1;
+            } else if((focusedObj.yPos - movingObjs.get(i).yPos) * -1 > 0 && (focusedObj.xPos - movingObjs.get(i).xPos) * -1 < 0){
+                scaleX *= -1;
+            } else if((focusedObj.yPos - movingObjs.get(i).yPos) * -1 > 0 && (focusedObj.xPos - movingObjs.get(i).xPos) * -1 > 0){
+                scaleX *= -1;
+                scaleY *= -1;
+            }
             movingObjs.get(i).move();
             g.setColor(movingObjs.get(i).color);
-            g.drawString(movingObjs.get(i).name, (int) (movingObjs.get(i).xPos) + shiftX, (int) (movingObjs.get(i).yPos-10) + shiftY);
+            g.drawString(movingObjs.get(i).name, (int) (movingObjs.get(i).xPos + shiftX - ((focusedObj.xPos - movingObjs.get(i).xPos) * -1 * scaleX)), (int) (movingObjs.get(i).yPos-10 + shiftY - ((focusedObj.xPos - movingObjs.get(i).xPos) * -1 * scaleY)));
             g.drawImage(movingObjs.get(i).pic, (int) (movingObjs.get(i).xPos) + shiftX, (int) (movingObjs.get(i).yPos) + shiftY, movingObjs.get(i).sizeX, movingObjs.get(i).sizeY, null);
             g.setColor(Color.YELLOW);
             g.drawLine((int) (movingObjs.get(i).xPos + (movingObjs.get(i).sizeX/2)) + shiftX, (int) (movingObjs.get(i).yPos + (movingObjs.get(i).sizeY/2)) + shiftY, (int) ((movingObjs.get(i).xPos + (movingObjs.get(i).sizeX/2)) + ((Math.cos(movingObjs.get(i).rad)*Math.abs(movingObjs.get(i).xAccel))*100000000)) + shiftX, (int) ((movingObjs.get(i).yPos + (movingObjs.get(i).sizeY/2) + (Math.sin(movingObjs.get(i).rad)*Math.abs(movingObjs.get(i).yAccel))*100000000)) + shiftY);
@@ -251,6 +264,15 @@ public class Main implements MouseListener, KeyListener {
                     index++;
                 }
                 focusedObj = movingObjs.get(index);
+                break;
+            case 'p':
+                scaleYGlob += 0.1;
+                scaleXGlob += 0.1;
+                break;
+            case 'l':
+                scaleYGlob -= 0.1;
+                scaleXGlob -= 0.1;
+                break;
         }
     }
 
