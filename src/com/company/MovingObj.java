@@ -38,8 +38,7 @@ public class MovingObj {
         this.color = color;
         this.pic = pic;
     }
-
-
+    
     public void setVectors(){
         xAccel = 0;
         yAccel = 0;
