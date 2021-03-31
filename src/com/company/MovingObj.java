@@ -7,6 +7,8 @@ public class MovingObj {
 
     public String name;
 
+    public boolean canMove;
+
     public double mass;
     public double xPos;
     public double yPos;
@@ -30,7 +32,7 @@ public class MovingObj {
 
     public Image pic;
 
-    public MovingObj(String name, double mass, int sizeX, int sizeY, double xPos, double yPos, Color color, MovingObj orbiting, Image pic){
+    public MovingObj(String name, double mass, int sizeX, int sizeY, double xPos, double yPos, Color color, MovingObj orbiting, Image pic, boolean canMove){
         System.out.println(orbiting.xPos);
         this.name = name;
         this.mass = mass;
@@ -44,10 +46,11 @@ public class MovingObj {
         sizeYDraw = this.sizeY;
         this.color = color;
         this.pic = pic;
+        this.canMove = canMove;
         setOrbitVel(orbiting);
     }
 
-    public MovingObj (String name, double mass, int sizeX, int sizeY, double xPos, double yPos, Color color, double yVel, double xVel, Image pic) {
+    public MovingObj (String name, double mass, int sizeX, int sizeY, double xPos, double yPos, Color color, double yVel, double xVel, Image pic, boolean canMove) {
         this.name = name;
         this.mass = mass;
         this.xPos = xPos;
@@ -62,6 +65,7 @@ public class MovingObj {
         sizeYDraw = this.sizeY;
         this.color = color;
         this.pic = pic;
+        this.canMove = canMove;
     }
 
     public void setOrbitVel(MovingObj orbiting) {

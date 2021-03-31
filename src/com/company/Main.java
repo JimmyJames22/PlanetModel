@@ -93,13 +93,13 @@ public class Main implements MouseListener, KeyListener {
     public void setUpPlanets(){
         movingObjs = new ArrayList<MovingObj>();
 
-        MovingObj sun = new MovingObj("Sun", 10000, 80, 80, 200, 200, Color.YELLOW, 0, 0, sunPic);
+        MovingObj sun = new MovingObj("Sun", 10000, 80, 80, 200, 200, Color.YELLOW, 0, 0, sunPic, false);
         movingObjs.add(sun);
-        MovingObj earth = new MovingObj("Earth", 600, 20, 20,200, 400, Color.BLUE, sun, earthPic);
+        MovingObj earth = new MovingObj("Earth", 600, 20, 20,200, 400, Color.BLUE, sun, earthPic, false);
         movingObjs.add(earth);
-        MovingObj mars = new MovingObj("Mars", 650, 20, 20,-50, 200, Color.RED, sun, marsPic);
+        MovingObj mars = new MovingObj("Mars", 650, 20, 20,-50, 200, Color.RED, sun, marsPic, false);
         movingObjs.add(mars);
-        MovingObj shuttle = new MovingObj("Shuttle", 1 ,6, 12, 200, 420, Color.WHITE, earth, shuttlePic);
+        MovingObj shuttle = new MovingObj("Shuttle", 1 ,6, 12, 200, 420, Color.WHITE, earth, shuttlePic, true);
         movingObjs.add(shuttle);
 
         focusedObj = sun;
@@ -146,7 +146,6 @@ public class Main implements MouseListener, KeyListener {
             g.drawString(movingObjs.get(i).name, (int) (movingObjs.get(i).xPosDraw + shiftX), (int) (movingObjs.get(i).yPosDraw-10 + shiftY));
             g.drawImage(movingObjs.get(i).pic, (int) (movingObjs.get(i).xPosDraw) + shiftX, (int) (movingObjs.get(i).yPosDraw) + shiftY, movingObjs.get(i).sizeXDraw, movingObjs.get(i).sizeYDraw, null);
             g.setColor(Color.YELLOW);
-//            g.drawLine((int) (movingObjs.get(i).xPosDraw + (movingObjs.get(i).sizeXDraw/2)) + shiftX, (int) (movingObjs.get(i).yPosDraw + (movingObjs.get(i).sizeYDraw/2)) + shiftY, (int) ((movingObjs.get(i).xPosDraw + (movingObjs.get(i).sizeXDraw/2)) + ((Math.cos(movingObjs.get(i).rad)*Math.abs(movingObjs.get(i).xAccel))*100000000)) + shiftX, (int) ((movingObjs.get(i).yPosDraw + (movingObjs.get(i).sizeYDraw/2) + (Math.sin(movingObjs.get(i).rad)*Math.abs(movingObjs.get(i).yAccel))*100000000)) + shiftY);
             g.drawString( movingObjs.get(i).name + " x: " + movingObjs.get(i).xPos + " y: " + movingObjs.get(i).yPos, 10,  20+20*i);
         }
 
@@ -233,16 +232,24 @@ public class Main implements MouseListener, KeyListener {
     public void keyPressed(KeyEvent e) {
         switch(e.getKeyChar()){
             case 'w':
-                movingObjs.get(0).yPos -= 2;
+                if(focusedObj.canMove) {
+                    focusedObj.yPos -= 2;
+                }
                 break;
             case 's':
-                movingObjs.get(0).yPos += 2;
+                if(focusedObj.canMove) {
+                    focusedObj.yPos += 2;
+                }
                 break;
             case 'd':
-                movingObjs.get(0).xPos += 2;
+                if(focusedObj.canMove) {
+                    focusedObj.xPos += 2;
+                }
                 break;
             case  'a':
-                movingObjs.get(0).xPos -= 2;
+                if(focusedObj.canMove) {
+                    focusedObj.xPos -= 2;
+                }
                 break;
             case 'r':
                 int index = movingObjs.indexOf(focusedObj);
