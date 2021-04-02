@@ -33,6 +33,7 @@ public class Main implements MouseListener, KeyListener {
     public Image marsPic;
     public Image earthPic;
     public Image shuttlePic;
+    public Image venuspic;
 
     public static void main(String[] args) {
         Main m = new Main();
@@ -84,6 +85,7 @@ public class Main implements MouseListener, KeyListener {
         earthPic = Toolkit.getDefaultToolkit().getImage("earth.png");
         marsPic = Toolkit.getDefaultToolkit().getImage("mars.png");
         shuttlePic = Toolkit.getDefaultToolkit().getImage("shuttle.png");
+        venuspic = Toolkit.getDefaultToolkit().getImage("venuspic.png");
 
         scale = 1;
 
@@ -101,6 +103,8 @@ public class Main implements MouseListener, KeyListener {
         movingObjs.add(mars);
         MovingObj shuttle = new MovingObj("Shuttle", 1 ,6, 12, 200, 420, Color.WHITE, earth, shuttlePic, true);
         movingObjs.add(shuttle);
+        MovingObj venus = new MovingObj("Venus", 480, 19, 19,-50, 200, Color.ORANGE, sun, venuspic);
+        movingObjs.add(venus);
 
         focusedObj = sun;
     }
