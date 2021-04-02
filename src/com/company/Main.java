@@ -103,7 +103,7 @@ public class Main implements MouseListener, KeyListener {
         movingObjs.add(mars);
         MovingObj shuttle = new MovingObj("Shuttle", 1 ,6, 12, 200, 420, Color.WHITE, earth, shuttlePic, true);
         movingObjs.add(shuttle);
-        MovingObj venus = new MovingObj("Venus", 480, 19, 19,-50, 200, Color.ORANGE, sun, venuspic);
+        MovingObj venus = new MovingObj("Venus", 480, 19, 19,300, 200, Color.ORANGE, sun, venuspic,false);
         movingObjs.add(venus);
 
         focusedObj = sun;
