@@ -34,6 +34,12 @@ public class Main implements MouseListener, KeyListener {
     public Image earthPic;
     public Image shuttlePic;
     public Image venuspic;
+    public Image mercuryPic;
+    public Image saturnPic;
+    public Image uranusPic;
+    public Image jupiterPic;
+    public Image neptunePic;
+
 
     public static void main(String[] args) {
         Main m = new Main();
@@ -86,6 +92,11 @@ public class Main implements MouseListener, KeyListener {
         marsPic = Toolkit.getDefaultToolkit().getImage("mars.png");
         shuttlePic = Toolkit.getDefaultToolkit().getImage("shuttle.png");
         venuspic = Toolkit.getDefaultToolkit().getImage("venuspic.png");
+        mercuryPic = Toolkit.getDefaultToolkit().getImage("mercury.png");
+        saturnPic = Toolkit.getDefaultToolkit().getImage("saturn.png");
+        uranusPic = Toolkit.getDefaultToolkit().getImage("uranus.png");
+        jupiterPic = Toolkit.getDefaultToolkit().getImage("Jupiter.png");
+        neptunePic = Toolkit.getDefaultToolkit().getImage("neptune.png");
 
         scale = 1;
 
@@ -103,9 +114,12 @@ public class Main implements MouseListener, KeyListener {
         movingObjs.add(mars);
         MovingObj shuttle = new MovingObj("Shuttle", 1 ,6, 12, 200, 420, Color.WHITE, earth, shuttlePic, true);
         movingObjs.add(shuttle);
-        MovingObj venus = new MovingObj("Venus", 480, 19, 19,300, 200, Color.ORANGE, sun, venuspic,false);
+        MovingObj venus = new MovingObj("Venus", 480, 20, 20,300, 200, Color.ORANGE, sun, venuspic,false);
         movingObjs.add(venus);
-
+        MovingObj mercury = new MovingObj("Mercury", 480, 20, 20,400, 100, Color.pink, sun, mercuryPic,false);
+        movingObjs.add(mercury);
+        MovingObj jupiter = new MovingObj("Jupiter", 480, 20, 20,-250, 300, Color.yellow, sun, jupiterPic,false);
+        movingObjs.add(jupiter);
         focusedObj = sun;
     }
 
