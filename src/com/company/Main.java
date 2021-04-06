@@ -120,6 +120,12 @@ public class Main implements MouseListener, KeyListener {
         movingObjs.add(mercury);
         MovingObj jupiter = new MovingObj("Jupiter", 480, 20, 20,-250, 300, Color.yellow, sun, jupiterPic,false);
         movingObjs.add(jupiter);
+        MovingObj saturn = new MovingObj("Saturn", 480, 20, 20,-350, 400, Color.white, sun, saturnPic,false);
+        movingObjs.add(saturn);
+        MovingObj uranus = new MovingObj("Uranus", 480, 20, 20,-450, 500, Color.blue, sun, jupiterPic,false);
+        movingObjs.add(uranus);
+        MovingObj neptune = new MovingObj("Neptune", 480, 20, 20,-550, 600, Color.cyan, sun, jupiterPic,false);
+        movingObjs.add(neptune);
         focusedObj = sun;
     }
 
